@@ -2,6 +2,7 @@
 // PointsOfInterestController.cs
 //
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System.Linq;
@@ -16,12 +17,16 @@ namespace CityInfo.API.Controllers
     {
         private ILogger<PointsOfInterestController> _logger;
         private IMailService _mailService;
+        private ICityInfoRepository _cityInfoRepository;
 
         // Contructor injection with logging
-        public PointsOfInterestController(ILogger<PointsOfInterestController> logger, IMailService mailService)
+        public PointsOfInterestController(ILogger<PointsOfInterestController> logger, 
+            IMailService mailService,
+            ICityInfoRepository cityInfoRepository)
         {
             _logger = logger;
             _mailService = mailService;
+            _cityInfoRepository = cityInfoRepository;
         }
 
         [HttpGet("{cityId}/pointsofinterest")]
@@ -29,18 +34,29 @@ namespace CityInfo.API.Controllers
         {
             try
             {
-                // Look up the wanted city
-                var city = CitiesDataStore.Current.Cities.FirstOrDefault(x => x.Id == cityId);
-
                 // If city is not found return a not found status code
-                if (city == null)
+                if (!_cityInfoRepository.CityExists(cityId))
                 {
                     _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of interest.");
                     return NotFound();
                 }
 
-                // else return status code 200 with points of interest
-                return Ok(city.PointsOfInterest);
+                var pointsOfInterestForCity = _cityInfoRepository.GetPointsOfInterestForCity(cityId);
+
+                var pointsOfInterestForCityResults = new List<PointOfInterestDto>();
+                foreach (var poi in pointsOfInterestForCity)
+                {
+                    // We map the returned list of points of interest to DTOs
+                    pointsOfInterestForCityResults.Add(new PointOfInterestDto()
+                    {
+                        Id = poi.Id,
+                        Name = poi.Name,
+                        Description = poi.Description
+                    });
+                }
+
+                // Then we return this list of DTOs
+                return Ok(pointsOfInterestForCityResults);
             }
             catch (Exception ex)
             {
@@ -52,31 +68,37 @@ namespace CityInfo.API.Controllers
         [Route("{cityId}/pointsofinterest/{id}", Name = "GetPointOfInterest")]
         public IActionResult GetPointOfInterest(int cityId, int id)
         {
-            // Look up the wanted city
-            var city = CitiesDataStore.Current.Cities.FirstOrDefault(x => x.Id == cityId);
-
-            // If city is not found return a 404 HTTP status code
-            if (city == null)
+            // First we will check if the city exists
+            if (!_cityInfoRepository.CityExists(cityId))
             {
                 return NotFound();
             }
 
-            // Lookup the specified point of interest
-            var pointOfInterest = city.PointsOfInterest.FirstOrDefault(x => x.Id == id);
+            // Lets try get the point of interest for the city
+            // if we get null back , we return 404 not found HTTP status
+            var pointOfInterest = _cityInfoRepository.GetPointOfInterestForCity(cityId, id);
 
-            // If the point of interest place is not found return a 404 status code
             if (pointOfInterest == null)
             {
                 return NotFound();
             }
 
-            // return the point of interest with 200 HTTP status code
-            return Ok(pointOfInterest);
+            // Otherwise we map the POI to a DTO
+            var pointOfInterestResult = new PointOfInterestDto()
+            {
+                Id = pointOfInterest.Id,
+                Name = pointOfInterest.Name,
+                Description = pointOfInterest.Description
+            };
+
+            // Then we return that DTO
+            return Ok(pointOfInterestResult);
+
         }
 
         [HttpPost("{cityId}/pointsofinterest")]
         public IActionResult CreatePointOfInterest(int cityId,
-                                                   [FromBody] PointOfInterestForCreationDto pointOfInterest)
+            [FromBody] PointOfInterestForCreationDto pointOfInterest)
         {
             if (pointOfInterest == null)
             {

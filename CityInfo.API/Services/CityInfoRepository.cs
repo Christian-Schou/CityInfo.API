@@ -59,5 +59,20 @@ namespace CityInfo.API.Services
             return _context.PointsOfInterest
                 .FirstOrDefault(p => p.CityId == cityId && p.Id == pointOfInterestId);
         }
+
+        public void AddPointOfInterestForCity(int cityId, PointOfInterest pointOfInterest)
+        {
+            var city = GetCity(cityId, false);
+            // This will make sure the foreign key is set to the CityId when persisting
+            city.PointsOfInterest.Add(pointOfInterest);
+        }
+
+        public bool Save()
+        {
+            // this return the amount of entities that have been changed
+            // this means that our method returns true, when 0 or mere entities
+            // have been saved to the database
+            return (_context.SaveChanges() >= 0);
+        }
     }
 }

@@ -1,0 +1,48 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityInfo.API", "CityInfo.API\CityInfo.API.csproj", "{1503189A-74F5-4C44-9899-BD947AC6354B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1503189A-74F5-4C44-9899-BD947AC6354B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1503189A-74F5-4C44-9899-BD947AC6354B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1503189A-74F5-4C44-9899-BD947AC6354B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1503189A-74F5-4C44-9899-BD947AC6354B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
+		$0.StandardHeader = $2
+		$2.Text = @${CopyrightHolder}\n${FileName}\n
+		$0.VersionControlPolicy = $3
+		$0.TextStylePolicy = $4
+		$4.inheritsSet = null
+		$4.scope = text/x-csharp
+		$0.CSharpFormattingPolicy = $5
+		$5.scope = text/x-csharp
+		$0.TextStylePolicy = $6
+		$6.FileWidth = 80
+		$6.TabsToSpaces = True
+		$6.scope = text/plain
+		$0.TextStylePolicy = $7
+		$7.inheritsSet = null
+		$7.scope = text/x-json
+		$0.JSONFormattingPolicy = $8
+		$8.AutoStructureCompletion = True
+		$8.BracePositions = SemiExpanded
+		$8.FormatOnPaste = True
+		$8.scope = text/x-json
+		$0.TextStylePolicy = $9
+		$9.inheritsSet = null
+		$9.scope = text/x-web
+		$0.TextStylePolicy = $10
+		$10.inheritsSet = null
+		$10.scope = text/x-vs
+	EndGlobalSection
+EndGlobal

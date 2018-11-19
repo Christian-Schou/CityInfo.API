@@ -21,16 +21,16 @@ namespace CityInfo.API.Services
             _context = context;
         }
 
-        public bool CityExists(int cityId)
-        {
-            return _context.Cities.Any(c => c.Id == cityId);
-        }
-
         public IEnumerable<City> GetCities()
         {
             // remember .ToList to make sure the query is executed at that specific moment
             // Calling tolist means iteration and for that to happen we have to make a query
-            return _context.Cities.OrderBy(x => x.Id).ToList();
+            return _context.Cities.OrderBy(x => x.Name).ToList();
+        }
+
+        public bool CityExists(int cityId)
+        {
+            return _context.Cities.Any(c => c.Id == cityId);
         }
 
         public City GetCity(int cityId, bool includePointsOfInterest)

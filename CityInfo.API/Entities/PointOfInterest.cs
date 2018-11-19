@@ -19,6 +19,9 @@ namespace CityInfo.API.Entities
 
         public string Name { get; set; }
 
+        [MaxLength(200)]
+        public string Description { get; set; }
+
         // Navigation property - the forerign key
         // its a depended class. Also called a convetion based approach
 

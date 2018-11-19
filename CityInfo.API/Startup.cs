@@ -66,6 +66,10 @@ namespace CityInfo.API
 #endif
             var connectionString = Startup.Configuration["connectionStrings:cityInfoDBConnectionString"];
             services.AddDbContext<CityInfoContext>(x => x.UseSqlServer(connectionString));
+
+            // The repository is created once per request using a scopred lifetime
+            // (contract, implementation)
+            services.AddScoped<ICityInfoRepository, CityInfoRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

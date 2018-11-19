@@ -10,7 +10,7 @@ namespace CityInfo.API.Entities
         public CityInfoContext(DbContextOptions<CityInfoContext> options)
             : base(options)
         {
-            //
+            Database.Migrate();
         }
 
         public DbSet<City> Cities { get; set; }

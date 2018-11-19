@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using AutoMapper;
 using CityInfo.API.Models;
 using CityInfo.API.Services;
 
@@ -23,17 +25,8 @@ namespace CityInfo.API.Controllers
             // return Ok(CitiesDataStore.Current.Cities);
             var cityEntities = _cityInfoRepository.GetCities();
 
-            var results = new List<CityWithoutPointsOfInterestDto>();
-
-            foreach (var cityEntity in cityEntities)
-            {
-                results.Add(new CityWithoutPointsOfInterestDto
-                {
-                    Id = cityEntity.Id,
-                    Name = cityEntity.Name,
-                    Description = cityEntity.Description
-                });
-            }
+            // Use the automapper, so we don't have to write all the mappings manually
+            var results = Mapper.Map<IEnumerable<CityWithoutPointsOfInterestDto>>(cityEntities);
 
             return Ok(results);
         }
@@ -49,66 +42,24 @@ namespace CityInfo.API.Controllers
             {
                 return NotFound();
             }
-
-            // We have to map this result. Either to a CityDto or a CityWithoutPointsOfInterestDto
-
+            
             // First we check the included value for the points of interest value
             // if it had to be included, then
             if (includePointsOfInterest)
             {
-                // We will map to a CityDto, then
-                var cityResult = new CityDto()
-                {
-                    Id = city.Id,
-                    Name = city.Name,
-                    Description = city.Description
-                };
-
-                // Run through the points of interest and map each point of interest to
-                // a PointOfInterestDto, then
-                foreach (var poi in city.PointsOfInterest)
-                {
-                    cityResult.PointsOfInterest.Add(
-                        new PointOfInterestDto()
-                        {
-                            Id = poi.Id,
-                            Name = poi.Name,
-                            Description = poi.Description
-                        });
-                }
+                var cityResult = Mapper.Map<CityDto>(city);
 
                 // We return the results
                 return Ok(cityResult);
             }
 
             // If they don't have to be included
-            // We map to a CityWithoutPointsOfInterestDto
+            // We map to a CityWithoutPointsOfInterestDto with Automapper
 
-            var cityWithoutPointsOfInterestResult =
-                new CityWithoutPointsOfInterestDto()
-                {
-                    Id = city.Id,
-                    Name = city.Name,
-                    Description = city.Description
-                };
+            var cityWithoutPointsOfInterestResult = Mapper.Map<CityWithoutPointsOfInterestDto>(city);
 
             // After that, we return that dto
             return Ok(cityWithoutPointsOfInterestResult);
-
-            //// find city
-            //var cityToReturn = 
-            //    CitiesDataStore.Current.Cities.FirstOrDefault(x => x.Id == id);
-
-            //// If city is not found
-            //// we will return a 404 Not found HTTP status code
-            //if(cityToReturn == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //// Else we will return a 
-            //// HTTP status code 200 with the specified city
-            //return Ok(cityToReturn);
         }
     }
 }

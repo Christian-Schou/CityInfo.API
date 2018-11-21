@@ -7,18 +7,27 @@ The solution let's you create a project that can handle api requests about citie
 
 ### Migrate Database in your own project
 
-In the console type the following:
+In the console type the following. Remember to change <NameOfMigration> to your own description.
 
 ```sh
-npm install my-crazy-module --save
+Add-Migration <NameOfMigration>
+```
+Example:
+
+```sh
+Add-Migration CityInfoDbInitialMigration
 ```
 
 ## Usage example
 
 1. Clone the project
+
 2. Rebuild the solution
+
 3. Hit F5 to run the project - you will get an 404 Error at first. This is because the app makes use of UseStatusCodePages(); and their haven't been added a startup page or default text.
+
 4. Go to http://localhost:port/swagger (change localhost and port with your projects URL)
+
 5. Test and explore the application. You can test the API through swagger. The database will be seeded on startup, so you have something to play around with.
 
 ## Release History
@@ -29,5 +38,3 @@ npm install my-crazy-module --save
 ## Meta
 
 Christian Schou – [@YourTwitter](https://twitter.com/)
-
-[https://github.com/Christian-Schou](https://github.com/Christian-Schou)

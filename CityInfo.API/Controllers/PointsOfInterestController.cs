@@ -57,7 +57,8 @@ namespace CityInfo.API.Controllers
             }
         }
 
-        [Route("{cityId}/pointsofinterest/{id}", Name = "GetPointOfInterest")]
+
+        [HttpGet("{cityId}/pointsofinterest/{id}", Name = "GetPointOfInterest")]
         public IActionResult GetPointOfInterest(int cityId, int id)
         {
             // First we will check if the city exists
@@ -83,6 +84,12 @@ namespace CityInfo.API.Controllers
 
         }
 
+        /// <summary>
+        /// This let's you create a point of interest in the database
+        /// </summary>
+        /// <param name="cityId">City Id</param>
+        /// <param name="pointOfInterest">Data from body</param>
+        /// <returns>Returns a response with the location header for the created Point of interest</returns>
         [HttpPost("{cityId}/pointsofinterest")]
         public IActionResult CreatePointOfInterest(int cityId,
             [FromBody] PointOfInterestForCreationDto pointOfInterest)

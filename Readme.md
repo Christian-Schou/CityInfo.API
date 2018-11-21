@@ -37,4 +37,4 @@ Add-Migration CityInfoDbInitialMigration
 
 ## Meta
 
-Christian Schou – [@YourTwitter](https://twitter.com/)
+[https://github.com/Christian-Schou](https://github.com/Christian-Schou)

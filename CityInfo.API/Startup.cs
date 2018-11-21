@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -14,12 +15,12 @@ using CityInfo.API.Services;
 using Microsoft.Extensions.Configuration;
 using CityInfo.API.Entities;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace CityInfo.API
 {
     public class Startup
     {
-
         //public static IConfigurationRoot Configuration;
 
         public static IConfiguration Configuration { get; private set; }
@@ -29,20 +30,41 @@ namespace CityInfo.API
             Configuration = configuration;
         }
 
-        //public Startup(IHostingEnvironment env)
-        //{
-        //    var builder = new ConfigurationBuilder()
-        //        .SetBasePath(env.ContentRootPath)
-        //        .AddJsonFile("appSettings.json", optional:false, reloadOnChange:true);
-
-        //    Configuration = builder.Build();
-        //}
-
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            // On the MVC service, we can add Json options
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Version = "v1",
+                    Title = "City Info API",
+                    Description = "API documentation on the CityInfo.API project",
+                    TermsOfService = "None",
+                    Contact = new Contact
+                    {
+                        Name = "Christian Schou",
+                        Email = string.Empty,
+                        Url = "#"
+                    },
+                    License = new License
+                    {
+                        Name = "Use under LICX",
+                        Url = "https://example.com/license"
+                    }
+                });
+
+                //Determine base path for the application.
+                var basePath = AppContext.BaseDirectory;
+                var assemblyName = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;
+                var fileName = Path.GetFileName(assemblyName + ".xml");
+
+                //Set the comments path for the swagger json and ui.
+                c.IncludeXmlComments(Path.Combine(basePath, fileName));
+            });
+
+            // On the MVC service, we can add JSON options
             services.AddMvc()
                     .AddMvcOptions(o => o.OutputFormatters.Add(
                         new XmlDataContractSerializerOutputFormatter()));
@@ -75,6 +97,7 @@ namespace CityInfo.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, CityInfoContext cityInfoContext)
         {
+            app.UseSwagger();
 
             loggerFactory.AddNLog();
 
@@ -101,17 +124,16 @@ namespace CityInfo.API
                     cfg.CreateMap<Entities.PointOfInterest, Models.PointOfInterestForUpdateDto>();
                 });
 
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
+
             app.UseMvc();
-
-            //app.Run((context) =>
-            //{
-            //    throw new Exception("Example exception");
-            //});
-
-            //app.Run(async (context) =>
-            //{
-            //    await context.Response.WriteAsync("Hello World!");
-            //}
+            
         }
     }
 }

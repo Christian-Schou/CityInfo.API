@@ -19,6 +19,10 @@ namespace CityInfo.API.Controllers
             _cityInfoRepository = cityInfoRepository;
         }
 
+        /// <summary>
+        /// This will let you see all cities in the database.
+        /// </summary>
+        /// <returns>Returns a result with cities in the database.</returns>
         [HttpGet()]
         public IActionResult GetCities()
         {
@@ -31,6 +35,12 @@ namespace CityInfo.API.Controllers
             return Ok(results);
         }
 
+        /// <summary>
+        /// This allows you to get a specific city and choose to get points of interest for that city
+        /// </summary>
+        /// <param name="id">City Id</param>
+        /// <param name="includePointsOfInterest">Include point of interest</param>
+        /// <returns>Returns a specific city with or without points of interest</returns>
         [HttpGet("{id}")]
         public IActionResult GetCity(int id, bool includePointsOfInterest = false)
         {

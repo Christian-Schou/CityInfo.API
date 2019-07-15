@@ -81,11 +81,9 @@ namespace CityInfo.API
             //        }
             //});
 
-#if DEBUG
+
             services.AddTransient<IMailService, LocalMailServices>();
-#else
-            services.AddTransient<IMailService, CloudMailServices>();
-#endif
+
             var connectionString = Startup.Configuration["connectionStrings:cityInfoDBConnectionString"];
             services.AddDbContext<CityInfoContext>(x => x.UseSqlServer(connectionString));
 

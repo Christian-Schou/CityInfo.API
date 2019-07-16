@@ -1,6 +1,7 @@
 # CityInfo.API
 > Little project making use of technics learned from education
 
+[![Build status](https://dev.azure.com/hesehus/CHSCDevOpsTest/_apis/build/status/CHSCDevOpsTest%20-%20CI)](https://dev.azure.com/hesehus/CHSCDevOpsTest/_build/latest?definitionId=1)
 
 The solution let's you create a project that can handle api requests about cities and points of interest for the specific cities. See the API documentation for information, on how to use the API.
 
